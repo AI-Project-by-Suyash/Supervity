@@ -8,6 +8,12 @@
 
 **Input**: User description: "Real-Time Exception Resolution Workbench - Human-in-the-loop exception detection, AI explanation, confidence-scored recommendation, policy-driven auto-resolution, escalation, and comprehensive audit trail."
 
+## Clarifications
+
+### Session 2026-08-21
+
+- Q: Which LLM provider hierarchy should the AI Employee use for real-time explanations and resolution recommendations? → A: Option A (Dual-Provider with Automatic Fallback & Rate Limit Protection: Groq `llama-3.3-70b-versatile` as ultra-fast primary engine with automatic failover to NVIDIA `nvidia/nemotron-3.5-lightning-30b-a3b`, combined with deterministic fallback to ensure 100% uptime without hitting rate limits).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Triage and Inspect Flagged Exceptions (Priority: P1)
@@ -106,7 +112,7 @@ As a Compliance Officer, I want an immutable, chronological audit trail for ever
 
 ### Edge Cases
 
-- **LLM Service Unavailable / Offline**: The workbench must continue functioning deterministically; deterministic exception data, evidence, and manual human review buttons remain fully operational while AI actions display a graceful fallback notice.
+- **LLM Service Outage / Rate Limits**: When Groq rate limits or encounters timeouts/errors, the system automatically fails over to NVIDIA NIM; if both external LLM services are unreachable, the system triggers graceful deterministic fallback ensuring exception triage, evidence views, and manual human reviews remain 100% operational without crashing.
 - **Malformed / Non-Conforming AI Output**: If the AI model returns invalid JSON or an action outside the allowed enum, the system retries once; if it fails again, it automatically routes the exception to `HUMAN_REVIEW` without crashing.
 - **Incomplete / Null Evidence Values**: If a transaction contains null actual quantity or missing invoice data, the system flags the exception as High severity, blocks auto-resolution at the safety gate, and marks it for immediate escalation.
 - **Concurrent / Duplicate Resolution**: If two review actions occur on the same exception, the first valid transition succeeds and subsequent duplicate resolutions are rejected with a clear status warning.
@@ -128,7 +134,8 @@ As a Compliance Officer, I want an immutable, chronological audit trail for ever
 - **FR-010**: System MUST enable human reviewers to inspect evidence, view AI suggestions, and execute authoritative human actions (`APPROVE`, `REJECT`, `ESCALATE`) with mandatory reasoning.
 - **FR-011**: System MUST record immutable audit events for all state transitions, AI outputs, policy gate decisions, and reviewer actions with timestamps and actor attribution.
 - **FR-012**: System MUST seed 12 representative mock exceptions across the three exception types, explicitly covering high confidence (auto-resolve), medium confidence (human review), and low/incomplete evidence (escalation) scenarios.
-- **FR-013**: System MUST gracefully handle LLM provider failures, timeouts, and schema validation errors without disrupting deterministic queue operations.
+- **FR-013**: System MUST implement a resilient dual-provider LLM orchestration layer utilizing Groq (`llama-3.3-70b-versatile`) as the primary low-latency inference provider with automatic fallback to NVIDIA NIM (`nvidia/nemotron-3.5-lightning-30b-a3b`).
+- **FR-014**: System MUST enforce intelligent rate-limit mitigation (prompt-response caching, timeout protection, retry backoff, and instant deterministic fallback) ensuring zero application downtime and uninterrupted operations.
 
 ### Key Entities
 
