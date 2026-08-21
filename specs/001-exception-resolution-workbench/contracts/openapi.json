@@ -1,0 +1,272 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Exception Resolution Workbench API",
+    "version": "1.0.0",
+    "description": "API contract for Real-Time Exception Resolution Workbench supporting deterministic exception triage, AI explanation, suggestions, confidence evaluation, autonomous resolution, human review, and audit trail."
+  },
+  "paths": {
+    "/api/exceptions": {
+      "get": {
+        "summary": "List Exceptions",
+        "description": "Retrieve exception queue items with optional filters by status, severity, and type.",
+        "parameters": [
+          { "name": "status", "in": "query", "required": false, "schema": { "type": "string" } },
+          { "name": "severity", "in": "query", "required": false, "schema": { "type": "string" } },
+          { "name": "type", "in": "query", "required": false, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of exception summaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": { "type": "array", "items": { "$ref": "#/components/schemas/ExceptionSummary" } },
+                    "total": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exceptions/{id}": {
+      "get": {
+        "summary": "Get Exception Detail",
+        "description": "Fetch full details of an exception, including parent transaction and structured evidence.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detailed exception record",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExceptionDetail" }
+              }
+            }
+          },
+          "404": { "description": "Exception not found" }
+        }
+      }
+    },
+    "/api/exceptions/{id}/explain": {
+      "post": {
+        "summary": "Request AI Root-Cause Explanation",
+        "description": "Asks the AI Employee to explain why the item was flagged based strictly on verified evidence.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured AI explanation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExplanationResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exceptions/{id}/suggest": {
+      "post": {
+        "summary": "Request AI Suggested Resolution",
+        "description": "Generates a confidence-scored resolution recommendation constrained to allowed business actions.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suggested action and confidence evaluation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuggestionResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exceptions/{id}/resolve": {
+      "post": {
+        "summary": "Execute Resolution",
+        "description": "Attempts autonomous or system resolution subject to safety gate and confidence threshold validation.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "mode": { "type": "string", "enum": ["AUTO", "MANUAL"], "default": "AUTO" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resolution execution outcome",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ResolveResponse" }
+              }
+            }
+          },
+          "400": { "description": "Auto-resolution blocked by policy or invalid status" }
+        }
+      }
+    },
+    "/api/exceptions/{id}/review": {
+      "post": {
+        "summary": "Submit Human Reviewer Decision",
+        "description": "Records authoritative human action (APPROVE, REJECT, ESCALATE) with mandatory rationale.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["decision", "reason"],
+                "properties": {
+                  "decision": { "type": "string", "enum": ["APPROVE", "REJECT", "ESCALATE"] },
+                  "reason": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Human review recorded successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HumanReviewResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exceptions/{id}/audit": {
+      "get": {
+        "summary": "Get Audit Trail",
+        "description": "Returns chronological audit trail for a specific exception.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of immutable audit records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/AuditEvent" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExceptionSummary": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "transaction_id": { "type": "string" },
+          "reference_number": { "type": "string" },
+          "vendor": { "type": "string" },
+          "type": { "type": "string" },
+          "severity": { "type": "string" },
+          "status": { "type": "string" },
+          "title": { "type": "string" },
+          "difference": { "type": "string" },
+          "created_at": { "type": "string" }
+        }
+      },
+      "ExceptionDetail": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "transaction": { "type": "object" },
+          "type": { "type": "string" },
+          "severity": { "type": "string" },
+          "status": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "expected_value": { "type": "string" },
+          "actual_value": { "type": "string" },
+          "difference": { "type": "string" },
+          "threshold": { "type": "string" },
+          "evidence": { "type": "object" },
+          "resolution": { "type": "object" }
+        }
+      },
+      "ExplanationResponse": {
+        "type": "object",
+        "properties": {
+          "explanation": { "type": "string" },
+          "evidence_fields": { "type": "array", "items": { "type": "string" } },
+          "provider_used": { "type": "string" }
+        }
+      },
+      "SuggestionResponse": {
+        "type": "object",
+        "properties": {
+          "suggested_action": { "type": "string" },
+          "reason": { "type": "string" },
+          "confidence": { "type": "number" },
+          "score_breakdown": { "type": "object" },
+          "safety_gates_passed": { "type": "boolean" },
+          "recommended_decision": { "type": "string" },
+          "provider_used": { "type": "string" }
+        }
+      },
+      "ResolveResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "exception_id": { "type": "string" },
+          "action_executed": { "type": "string" },
+          "actor": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      },
+      "HumanReviewResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "exception_id": { "type": "string" },
+          "decision": { "type": "string" },
+          "actor": { "type": "string" }
+        }
+      },
+      "AuditEvent": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "exception_id": { "type": "string" },
+          "actor": { "type": "string" },
+          "action": { "type": "string" },
+          "reason": { "type": "string" },
+          "metadata": { "type": "object" },
+          "timestamp": { "type": "string" }
+        }
+      }
+    }
+  }
+}
