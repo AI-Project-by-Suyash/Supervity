@@ -1,16 +1,7 @@
-# Agentic AI Tooling & Internal Scratchpads (Strict Constitution Compliance)
-.agents/
-.gemini/
-.claude/
-.cursor/
-.cline/
-.roo/
-.system_generated/
-*.log
-
-# Spec Kit Local State
-.specify/feature.json
-.specify/extensions/*/local-config.yml
+# Exclude all dot-directories & agentic AI / tooling folders (.specify, .agents, .gemini, etc.)
+.*
+!.gitignore
+!.env.example
 
 # Python Caches & Virtual Environments
 __pycache__/
@@ -38,5 +29,3 @@ htmlcov/
 # OS & Editor Files
 .DS_Store
 Thumbs.db
-.vscode/
-.idea/
