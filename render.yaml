@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: supervity-workbench
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: NVIDIA_MODEL
+        value: nvidia/nemotron-3.5-lightning-30b-a3b
+      - key: AUTO_RESOLUTION_THRESHOLD
+        value: "0.90"
+      - key: HUMAN_REVIEW_THRESHOLD
+        value: "0.70"
+      - key: AMOUNT_VARIANCE_THRESHOLD
+        value: "0.10"
