@@ -9,6 +9,8 @@ services:
     envVars:
       - key: APP_ENV
         value: production
+      - key: PYTHON_VERSION
+        value: 3.12.7
       - key: GROQ_MODEL
         value: llama-3.3-70b-versatile
       - key: NVIDIA_MODEL
