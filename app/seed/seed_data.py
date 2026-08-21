@@ -5,6 +5,7 @@ from app.core.database import SessionLocal, engine
 from app.models.base import Base
 from app.models.transaction import Transaction
 from app.models.exception import ExceptionRecord, ExceptionType, Severity, ExceptionStatus
+from app.models.resolution import ResolutionRecord
 from app.models.audit import AuditEventRecord, ActorType
 
 def seed_database(db: Session = None, reset: bool = True):
@@ -16,13 +17,16 @@ def seed_database(db: Session = None, reset: bool = True):
 
     try:
         if reset:
+            db.query(ResolutionRecord).delete()
             db.query(AuditEventRecord).delete()
             db.query(ExceptionRecord).delete()
             db.query(Transaction).delete()
             db.commit()
 
-        # Load mock json
-        json_path = Path('data/mock_exceptions.json')
+        # Load mock json with robust path resolution
+        json_path = Path(__file__).resolve().parent.parent.parent / 'data' / 'mock_exceptions.json'
+        if not json_path.exists():
+            json_path = Path('data/mock_exceptions.json')
         if not json_path.exists():
             return 0
 

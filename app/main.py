@@ -69,8 +69,13 @@ async def serve_dashboard(request: Request):
     return templates.TemplateResponse(request=request, name='index.html')
 
 
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from app.core.database import get_db
+
 @app.post('/api/seed/reset', tags=['Seed'])
-async def reset_seed_data():
-    count = seed_database(reset=True)
+async def reset_seed_data(db: Session = Depends(get_db)):
+    count = seed_database(db=db, reset=True)
     return {'status': 'success', 'message': f'Reset and seeded {count} exceptions.'}
+
 

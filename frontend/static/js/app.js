@@ -72,12 +72,22 @@ function setupEventListeners() {
 
   btnResetSeed.addEventListener('click', async () => {
     if (confirm('Reset dataset back to initial 12 seed exceptions?')) {
-      const res = await fetch('/api/seed/reset', { method: 'POST' });
-      if (res.ok) {
-        showToast('Dataset reset successfully', 'success');
-        await fetchExceptions();
-        if (selectedExceptionId) selectException(selectedExceptionId);
-        if (currentView === 'analytics') fetchAnalytics();
+      try {
+        const res = await fetch('/api/seed/reset', { method: 'POST' });
+        if (res.ok) {
+          showToast('Dataset reset successfully!', 'success');
+          selectedExceptionId = null;
+          currentExceptionDetail = null;
+          if (explanationBox) explanationBox.classList.add('hidden');
+          if (suggestionBox) suggestionBox.classList.add('hidden');
+          
+          await fetchExceptions();
+          await fetchAnalytics();
+        } else {
+          showToast('Failed to reset dataset', 'error');
+        }
+      } catch (err) {
+        showToast('Error connecting to reset API', 'error');
       }
     }
   });

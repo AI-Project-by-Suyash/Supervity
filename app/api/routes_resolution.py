@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import get_db
@@ -30,7 +31,7 @@ async def suggest_resolution(exception_id: str, db: Session = Depends(get_db)):
     return await ai_service.generate_suggestion(exc)
 
 @router.post('/exceptions/{exception_id}/resolve', response_model=ResolveResponse)
-def resolve_exception(exception_id: str, payload: ResolveRequest, db: Session = Depends(get_db)):
+def resolve_exception(exception_id: str, payload: Optional[ResolveRequest] = None, db: Session = Depends(get_db)):
     service = ResolutionService(db)
     return service.execute_auto_resolve(exception_id)
 

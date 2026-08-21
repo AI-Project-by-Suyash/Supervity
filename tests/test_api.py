@@ -80,3 +80,26 @@ def test_analytics_metrics_api():
     assert data["summary"]["total_exceptions"] == 12
     assert "total_financial_exposure" in data["summary"]
 
+def test_reset_dataset_api():
+    # 1. Resolve an exception
+    res_resp = client.post("/api/exceptions/EXC-1001/resolve")
+    assert res_resp.status_code == 200
+    
+    # Verify it is resolved
+    exc_resp = client.get("/api/exceptions/EXC-1001")
+    assert exc_resp.json()["status"] == "RESOLVED"
+    
+    # 2. Trigger Reset
+    reset_resp = client.post("/api/seed/reset")
+    assert reset_resp.status_code == 200
+    assert reset_resp.json()["status"] == "success"
+    
+    # 3. Verify exception is restored to OPEN and resolutions are cleared
+    exc_resp2 = client.get("/api/exceptions/EXC-1001")
+    assert exc_resp2.json()["status"] == "OPEN"
+    
+    # 4. Verify analytics metrics are reset
+    metrics_resp = client.get("/api/analytics/metrics")
+    assert metrics_resp.json()["summary"]["auto_resolved_count"] == 0
+
+
