@@ -23,10 +23,10 @@
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="h-full flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="min-h-screen lg:h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white bg-slate-950 text-slate-100 overflow-x-hidden">
 
   <!-- Top Header & Metrics Bar -->
-  <header class="bg-slate-900 border-b border-slate-800 px-6 py-3.5 flex items-center justify-between shadow-md z-10">
+  <header class="bg-slate-900 border-b border-slate-800 px-4 lg:px-6 py-3 flex flex-wrap items-center justify-between gap-3 shadow-md z-20 shrink-0">
     <div class="flex items-center space-x-3">
       <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shadow-inner">
         <i class="fa-solid fa-shield-halved text-lg"></i>
@@ -81,12 +81,12 @@
   </header>
 
   <!-- Main 3-Column Workspace -->
-  <main class="flex-1 grid grid-cols-12 overflow-hidden">
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-0 overflow-y-auto lg:overflow-hidden">
 
     <!-- Column 1: Exception Queue (4 Cols) -->
-    <section class="col-span-4 border-r border-slate-800 flex flex-col bg-slate-900/50">
+    <section class="col-span-12 lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col bg-slate-900/50 min-h-[420px] lg:min-h-0 lg:h-full overflow-hidden">
       <!-- Filter Bar -->
-      <div class="p-3.5 border-b border-slate-800 space-y-2 bg-slate-900/80">
+      <div class="p-3.5 border-b border-slate-800 space-y-2 bg-slate-900/80 shrink-0">
         <div class="relative">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
           <input type="text" id="search-input" placeholder="Search reference, vendor, title..." 
@@ -118,14 +118,14 @@
       </div>
 
       <!-- Exception Queue List -->
-      <div id="queue-container" class="flex-1 overflow-y-auto divide-y divide-slate-800/60 p-2 space-y-1">
+      <div id="queue-container" class="flex-1 overflow-y-auto divide-y divide-slate-800/60 p-2 space-y-1 min-h-0">
         <div class="text-center py-12 text-slate-500 text-xs">Loading exceptions...</div>
       </div>
     </section>
 
     <!-- Column 2: Evidence & Transaction Inspection (4 Cols) -->
-    <section class="col-span-4 border-r border-slate-800 flex flex-col bg-slate-950/40 overflow-y-auto">
-      <div class="p-3.5 border-b border-slate-800 bg-slate-900/60 flex items-center justify-between sticky top-0 z-10">
+    <section class="col-span-12 lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col bg-slate-950/40 min-h-[450px] lg:min-h-0 lg:h-full overflow-y-auto">
+      <div class="p-3.5 border-b border-slate-800 bg-slate-900/60 flex items-center justify-between sticky top-0 z-10 shrink-0">
         <div class="flex items-center space-x-2">
           <i class="fa-solid fa-microchip text-slate-400 text-xs"></i>
           <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Evidence & Ground Truth</h2>
@@ -143,8 +143,8 @@
     </section>
 
     <!-- Column 3: AI Employee & Resolution Command (4 Cols) -->
-    <section class="col-span-4 flex flex-col bg-slate-900/30 overflow-y-auto">
-      <div class="p-3.5 border-b border-slate-800 bg-slate-900/60 flex items-center justify-between sticky top-0 z-10">
+    <section class="col-span-12 lg:col-span-4 flex flex-col bg-slate-900/30 min-h-[500px] lg:min-h-0 lg:h-full overflow-y-auto">
+      <div class="p-3.5 border-b border-slate-800 bg-slate-900/60 flex items-center justify-between sticky top-0 z-10 shrink-0">
         <div class="flex items-center space-x-2">
           <i class="fa-solid fa-brain text-emerald-400 text-xs"></i>
           <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">AI Employee & Resolution</h2>
