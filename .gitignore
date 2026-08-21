@@ -2,6 +2,13 @@
 .*
 !.gitignore
 !.env.example
+!.github
+!.github/**
+
+.specify/
+.agents/
+.gemini/
+
 
 # Python Caches & Virtual Environments
 __pycache__/
