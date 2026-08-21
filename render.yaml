@@ -12,9 +12,9 @@ services:
       - key: PYTHON_VERSION
         value: 3.12.7
       - key: GROQ_MODEL
-        value: llama-3.3-70b-versatile
+        value: openai/gpt-oss-120b
       - key: NVIDIA_MODEL
-        value: nvidia/nemotron-3.5-lightning-30b-a3b
+        value: meta/llama-3.1-8b-instruct
       - key: AUTO_RESOLUTION_THRESHOLD
         value: "0.90"
       - key: HUMAN_REVIEW_THRESHOLD

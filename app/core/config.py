@@ -12,10 +12,10 @@ class Settings(BaseSettings):
     # LLM Settings
     LLM_PROVIDER: str = 'groq'
     GROQ_API_KEY: str = ''
-    GROQ_MODEL: str = 'llama-3.3-70b-versatile'
+    GROQ_MODEL: str = 'openai/gpt-oss-120b'
     
     NVIDIA_API_KEY: str = ''
-    NVIDIA_MODEL: str = 'nvidia/nemotron-3.5-lightning-30b-a3b'
+    NVIDIA_MODEL: str = 'meta/llama-3.1-8b-instruct'
     NVIDIA_BASE_URL: str = 'https://integrate.api.nvidia.com/v1'
 
     # Policy & Confidence Thresholds
