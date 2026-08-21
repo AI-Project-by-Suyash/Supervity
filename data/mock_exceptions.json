@@ -1,0 +1,578 @@
+[
+  {
+    "id": "TXN-1001",
+    "reference_number": "INV-1023",
+    "transaction_type": "INVOICE",
+    "vendor": "Acme Industrial Supplies",
+    "expected_amount": 50000.0,
+    "actual_amount": 62500.0,
+    "expected_quantity": 100,
+    "actual_quantity": 100,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-1001",
+      "type": "AMOUNT_MISMATCH",
+      "severity": "HIGH",
+      "title": "Invoice amount \u20b962,500 exceeds PO \u20b950,000 (25% variance)",
+      "description": "Billed invoice amount from Acme Supplies is 25% higher than approved purchase order value.",
+      "expected_value": "\u20b950,000.00",
+      "actual_value": "\u20b962,500.00",
+      "difference": "\u20b912,500.00 (+25.0%)",
+      "threshold": "10.0%",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.amount",
+            "value": 62500.0,
+            "source": "invoice",
+            "label": "Invoice Billed Amount"
+          },
+          {
+            "name": "purchase_order.amount",
+            "value": 50000.0,
+            "source": "purchase_order",
+            "label": "Approved PO Amount"
+          },
+          {
+            "name": "variance",
+            "value": 0.25,
+            "source": "exception_engine",
+            "label": "Calculated Variance"
+          },
+          {
+            "name": "allowed_variance",
+            "value": 0.1,
+            "source": "policy",
+            "label": "Allowed Tolerance Threshold"
+          }
+        ],
+        "completeness_score": 1.0
+      }
+    }
+  },
+  {
+    "id": "TXN-1002",
+    "reference_number": "INV-1045",
+    "transaction_type": "INVOICE",
+    "vendor": "Zenith Logistics Ltd",
+    "expected_amount": 120000.0,
+    "actual_amount": 134400.0,
+    "expected_quantity": 50,
+    "actual_quantity": 50,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-1002",
+      "type": "AMOUNT_MISMATCH",
+      "severity": "MEDIUM",
+      "title": "Freight surcharge variance of 12% on PO #4491",
+      "description": "Zenith Logistics invoice included fuel surcharge resulting in 12% amount variance against 10% policy limit.",
+      "expected_value": "\u20b9120,000.00",
+      "actual_value": "\u20b9134,400.00",
+      "difference": "\u20b914,400.00 (+12.0%)",
+      "threshold": "10.0%",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.amount",
+            "value": 134400.0,
+            "source": "invoice",
+            "label": "Invoice Amount"
+          },
+          {
+            "name": "purchase_order.amount",
+            "value": 120000.0,
+            "source": "purchase_order",
+            "label": "PO Amount"
+          },
+          {
+            "name": "variance",
+            "value": 0.12,
+            "source": "exception_engine",
+            "label": "Variance"
+          },
+          {
+            "name": "allowed_variance",
+            "value": 0.1,
+            "source": "policy",
+            "label": "Allowed Policy Threshold"
+          }
+        ],
+        "completeness_score": 0.85
+      }
+    }
+  },
+  {
+    "id": "TXN-1003",
+    "reference_number": "INV-1089",
+    "transaction_type": "INVOICE",
+    "vendor": "Apex Tech Hardware",
+    "expected_amount": 250000.0,
+    "actual_amount": 255000.0,
+    "expected_quantity": 25,
+    "actual_quantity": 25,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-1003",
+      "type": "AMOUNT_MISMATCH",
+      "severity": "LOW",
+      "title": "Minor rounding variance of 2% on hardware invoice",
+      "description": "Invoice amount \u20b9255,000 is 2% higher than expected baseline due to localized sales tax adjustments.",
+      "expected_value": "\u20b9250,000.00",
+      "actual_value": "\u20b9255,000.00",
+      "difference": "\u20b95,000.00 (+2.0%)",
+      "threshold": "10.0%",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.amount",
+            "value": 255000.0,
+            "source": "invoice",
+            "label": "Invoice Amount"
+          },
+          {
+            "name": "purchase_order.amount",
+            "value": 250000.0,
+            "source": "purchase_order",
+            "label": "PO Amount"
+          },
+          {
+            "name": "variance",
+            "value": 0.02,
+            "source": "exception_engine",
+            "label": "Variance"
+          },
+          {
+            "name": "allowed_variance",
+            "value": 0.1,
+            "source": "policy",
+            "label": "Policy Threshold"
+          }
+        ],
+        "completeness_score": 0.95
+      }
+    }
+  },
+  {
+    "id": "TXN-1004",
+    "reference_number": "INV-1102",
+    "transaction_type": "INVOICE",
+    "vendor": "Global Global Corp",
+    "expected_amount": 80000.0,
+    "actual_amount": 112000.0,
+    "expected_quantity": 10,
+    "actual_quantity": null,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-1004",
+      "type": "AMOUNT_MISMATCH",
+      "severity": "HIGH",
+      "title": "High amount variance (40%) with unverified tax line",
+      "description": "Significant price elevation of 40% with missing itemized tax schedule documentation.",
+      "expected_value": "\u20b980,000.00",
+      "actual_value": "\u20b9112,000.00",
+      "difference": "\u20b932,000.00 (+40.0%)",
+      "threshold": "10.0%",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.amount",
+            "value": 112000.0,
+            "source": "invoice",
+            "label": "Invoice Amount"
+          },
+          {
+            "name": "purchase_order.amount",
+            "value": 80000.0,
+            "source": "purchase_order",
+            "label": "PO Amount"
+          },
+          {
+            "name": "variance",
+            "value": 0.4,
+            "source": "exception_engine",
+            "label": "Variance"
+          }
+        ],
+        "completeness_score": 0.6
+      }
+    }
+  },
+  {
+    "id": "TXN-2001",
+    "reference_number": "PO-8872",
+    "transaction_type": "GOODS_RECEIPT",
+    "vendor": "SteelCraft Fasteners",
+    "expected_amount": 45000.0,
+    "actual_amount": 45000.0,
+    "expected_quantity": 100,
+    "actual_quantity": null,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-2001",
+      "type": "QUANTITY_MISMATCH",
+      "severity": "HIGH",
+      "title": "Received goods delivery quantity missing/unrecorded",
+      "description": "Goods receipt PO-8872 indicates delivered quantity was not recorded by warehouse dock.",
+      "expected_value": "100 units",
+      "actual_value": "null (missing)",
+      "difference": "-100 units",
+      "threshold": "0 discrepancy",
+      "evidence": {
+        "fields": [
+          {
+            "name": "purchase_order.quantity",
+            "value": 100,
+            "source": "purchase_order",
+            "label": "Ordered Quantity"
+          },
+          {
+            "name": "goods_receipt.quantity",
+            "value": null,
+            "source": "goods_receipt",
+            "label": "Received Quantity"
+          }
+        ],
+        "completeness_score": 0.5
+      }
+    }
+  },
+  {
+    "id": "TXN-2002",
+    "reference_number": "PO-8890",
+    "transaction_type": "GOODS_RECEIPT",
+    "vendor": "Polymer Chem Works",
+    "expected_amount": 95000.0,
+    "actual_amount": 95000.0,
+    "expected_quantity": 500,
+    "actual_quantity": 420,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-2002",
+      "type": "QUANTITY_MISMATCH",
+      "severity": "HIGH",
+      "title": "Short shipment of 80 units (16% shortfall)",
+      "description": "Warehouse receipt recorded 420 units vs 500 units billed on vendor delivery manifest.",
+      "expected_value": "500 units",
+      "actual_value": "420 units",
+      "difference": "-80 units (16% shortfall)",
+      "threshold": "0 discrepancy",
+      "evidence": {
+        "fields": [
+          {
+            "name": "purchase_order.quantity",
+            "value": 500,
+            "source": "purchase_order",
+            "label": "Ordered Quantity"
+          },
+          {
+            "name": "goods_receipt.quantity",
+            "value": 420,
+            "source": "goods_receipt",
+            "label": "Delivered Quantity"
+          },
+          {
+            "name": "discrepancy_quantity",
+            "value": 80,
+            "source": "exception_engine",
+            "label": "Shortfall"
+          }
+        ],
+        "completeness_score": 1.0
+      }
+    }
+  },
+  {
+    "id": "TXN-2003",
+    "reference_number": "PO-8915",
+    "transaction_type": "GOODS_RECEIPT",
+    "vendor": "Optima Packaging",
+    "expected_amount": 30000.0,
+    "actual_amount": 30000.0,
+    "expected_quantity": 2000,
+    "actual_quantity": 1950,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-2003",
+      "type": "QUANTITY_MISMATCH",
+      "severity": "MEDIUM",
+      "title": "Minor packaging count discrepancy of 50 cartons",
+      "description": "Delivery count was 1,950 units against PO expectation of 2,000 units (2.5% discrepancy).",
+      "expected_value": "2,000 units",
+      "actual_value": "1,950 units",
+      "difference": "-50 units (2.5%)",
+      "threshold": "0 discrepancy",
+      "evidence": {
+        "fields": [
+          {
+            "name": "purchase_order.quantity",
+            "value": 2000,
+            "source": "purchase_order",
+            "label": "Ordered Quantity"
+          },
+          {
+            "name": "goods_receipt.quantity",
+            "value": 1950,
+            "source": "goods_receipt",
+            "label": "Received Quantity"
+          },
+          {
+            "name": "discrepancy_quantity",
+            "value": 50,
+            "source": "exception_engine",
+            "label": "Discrepancy"
+          }
+        ],
+        "completeness_score": 0.9
+      }
+    }
+  },
+  {
+    "id": "TXN-2004",
+    "reference_number": "PO-8940",
+    "transaction_type": "GOODS_RECEIPT",
+    "vendor": "Delta Precision Valves",
+    "expected_amount": 150000.0,
+    "actual_amount": 150000.0,
+    "expected_quantity": 60,
+    "actual_quantity": 65,
+    "due_date": null,
+    "reference_date": null,
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-2004",
+      "type": "QUANTITY_MISMATCH",
+      "severity": "LOW",
+      "title": "Over-delivery of 5 precision valves from vendor",
+      "description": "Vendor shipped 65 units against 60 PO units (overshipment without extra charge).",
+      "expected_value": "60 units",
+      "actual_value": "65 units",
+      "difference": "+5 units (over-delivery)",
+      "threshold": "0 discrepancy",
+      "evidence": {
+        "fields": [
+          {
+            "name": "purchase_order.quantity",
+            "value": 60,
+            "source": "purchase_order",
+            "label": "Ordered Quantity"
+          },
+          {
+            "name": "goods_receipt.quantity",
+            "value": 65,
+            "source": "goods_receipt",
+            "label": "Delivered Quantity"
+          },
+          {
+            "name": "discrepancy_quantity",
+            "value": -5,
+            "source": "exception_engine",
+            "label": "Over-delivery"
+          }
+        ],
+        "completeness_score": 0.95
+      }
+    }
+  },
+  {
+    "id": "TXN-3001",
+    "reference_number": "PAY-2041",
+    "transaction_type": "VENDOR_PAYMENT",
+    "vendor": "Nexus Cloud Services",
+    "expected_amount": 72000.0,
+    "actual_amount": 72000.0,
+    "expected_quantity": 1,
+    "actual_quantity": 1,
+    "due_date": "2026-08-01",
+    "reference_date": "2026-08-18",
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-3001",
+      "type": "PAYMENT_OVERDUE",
+      "severity": "MEDIUM",
+      "title": "Vendor payment overdue by 17 days",
+      "description": "Cloud infrastructure subscription payment due on 2026-08-01 is past due by 17 business days.",
+      "expected_value": "2026-08-01 (Due Date)",
+      "actual_value": "2026-08-18 (Current Date)",
+      "difference": "17 days overdue",
+      "threshold": "0 days grace",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.due_date",
+            "value": "2026-08-01",
+            "source": "invoice",
+            "label": "Invoice Due Date"
+          },
+          {
+            "name": "evaluation.reference_date",
+            "value": "2026-08-18",
+            "source": "system",
+            "label": "System Reference Date"
+          },
+          {
+            "name": "days_overdue",
+            "value": 17,
+            "source": "exception_engine",
+            "label": "Days Past Due"
+          },
+          {
+            "name": "payment_status",
+            "value": "UNPAID",
+            "source": "treasury",
+            "label": "AP Status"
+          }
+        ],
+        "completeness_score": 0.88
+      }
+    }
+  },
+  {
+    "id": "TXN-3002",
+    "reference_number": "PAY-2070",
+    "transaction_type": "VENDOR_PAYMENT",
+    "vendor": "Sterling Facilities Ltd",
+    "expected_amount": 38000.0,
+    "actual_amount": 38000.0,
+    "expected_quantity": 1,
+    "actual_quantity": 1,
+    "due_date": "2026-07-10",
+    "reference_date": "2026-08-18",
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-3002",
+      "type": "PAYMENT_OVERDUE",
+      "severity": "HIGH",
+      "title": "Critical payment default risk (39 days overdue)",
+      "description": "Facility maintenance invoice has exceeded payment terms by 39 days without active dispute note.",
+      "expected_value": "2026-07-10 (Due Date)",
+      "actual_value": "2026-08-18 (Current Date)",
+      "difference": "39 days overdue (>30d high severity)",
+      "threshold": "0 days grace",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.due_date",
+            "value": "2026-07-10",
+            "source": "invoice",
+            "label": "Due Date"
+          },
+          {
+            "name": "evaluation.reference_date",
+            "value": "2026-08-18",
+            "source": "system",
+            "label": "Reference Date"
+          },
+          {
+            "name": "days_overdue",
+            "value": 39,
+            "source": "exception_engine",
+            "label": "Days Overdue"
+          }
+        ],
+        "completeness_score": 0.95
+      }
+    }
+  },
+  {
+    "id": "TXN-3003",
+    "reference_number": "PAY-2095",
+    "transaction_type": "VENDOR_PAYMENT",
+    "vendor": "Solaris Clean Energy",
+    "expected_amount": 18500.0,
+    "actual_amount": 18500.0,
+    "expected_quantity": 1,
+    "actual_quantity": 1,
+    "due_date": "2026-08-15",
+    "reference_date": "2026-08-18",
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-3003",
+      "type": "PAYMENT_OVERDUE",
+      "severity": "LOW",
+      "title": "Payment overdue by 3 days (within grace buffer)",
+      "description": "Utility payment overdue by 3 days, within operational processing grace window.",
+      "expected_value": "2026-08-15 (Due Date)",
+      "actual_value": "2026-08-18 (Current Date)",
+      "difference": "3 days overdue",
+      "threshold": "0 days grace",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.due_date",
+            "value": "2026-08-15",
+            "source": "invoice",
+            "label": "Due Date"
+          },
+          {
+            "name": "evaluation.reference_date",
+            "value": "2026-08-18",
+            "source": "system",
+            "label": "Reference Date"
+          },
+          {
+            "name": "days_overdue",
+            "value": 3,
+            "source": "exception_engine",
+            "label": "Days Overdue"
+          }
+        ],
+        "completeness_score": 1.0
+      }
+    }
+  },
+  {
+    "id": "TXN-3004",
+    "reference_number": "PAY-2110",
+    "transaction_type": "VENDOR_PAYMENT",
+    "vendor": "Titan Capital Lease",
+    "expected_amount": 350000.0,
+    "actual_amount": 350000.0,
+    "expected_quantity": 1,
+    "actual_quantity": 1,
+    "due_date": null,
+    "reference_date": "2026-08-18",
+    "currency": "INR",
+    "exception": {
+      "id": "EXC-3004",
+      "type": "PAYMENT_OVERDUE",
+      "severity": "HIGH",
+      "title": "Lease payment missing contract due date schedule",
+      "description": "Titan Lease payment record lacks contractual due date metadata preventing automated overdue calculation.",
+      "expected_value": "Valid Due Date",
+      "actual_value": "null (Missing due date)",
+      "difference": "Indeterminate",
+      "threshold": "0 days grace",
+      "evidence": {
+        "fields": [
+          {
+            "name": "invoice.due_date",
+            "value": null,
+            "source": "invoice",
+            "label": "Due Date"
+          },
+          {
+            "name": "evaluation.reference_date",
+            "value": "2026-08-18",
+            "source": "system",
+            "label": "Reference Date"
+          }
+        ],
+        "completeness_score": 0.4
+      }
+    }
+  }
+]

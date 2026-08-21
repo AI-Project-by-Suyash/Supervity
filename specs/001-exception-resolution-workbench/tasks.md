@@ -15,9 +15,9 @@
 
 **Purpose**: Project initialization, environment setup, and dependency management.
 
-- [ ] T001 Initialize project structure, dependency manifest `requirements.txt`, and runtime entrypoint in `run.py`
-- [ ] T002 [P] Implement environment configuration management and validation in `app/core/config.py`
-- [ ] T003 [P] Implement SQLite database engine with WAL mode and session factory in `app/core/database.py`
+- [X] T001 Initialize project structure, dependency manifest `requirements.txt`, and runtime entrypoint in `run.py`
+- [X] T002 [P] Implement environment configuration management and validation in `app/core/config.py`
+- [X] T003 [P] Implement SQLite database engine with WAL mode and session factory in `app/core/database.py`
 
 ---
 
@@ -27,12 +27,12 @@
 
 **⚠️ CRITICAL**: No user story phase can proceed until this foundation is complete.
 
-- [ ] T004 [P] Create SQLAlchemy Base class, metadata mixins, and UUID/ID generators in `app/models/base.py`
-- [ ] T005 [P] Create relational ORM models (`Transaction`, `Exception`, `Resolution`, `AuditEvent`) in `app/models/transaction.py`, `app/models/exception.py`, `app/models/resolution.py`, and `app/models/audit.py`
-- [ ] T006 [P] Create Pydantic schemas for data validation and API I/O in `app/schemas/transaction.py`, `app/schemas/exception.py`, `app/schemas/resolution.py`, `app/schemas/ai.py`, and `app/schemas/audit.py`
-- [ ] T007 [P] Create database repositories for data access and queries in `app/repositories/transaction_repository.py`, `app/repositories/exception_repository.py`, and `app/repositories/audit_repository.py`
-- [ ] T008 Create 12 representative mock enterprise exceptions (covering High/Med/Low confidence and missing evidence edge cases) in `data/mock_exceptions.json` and seed loader in `app/seed/seed_data.py`
-- [ ] T009 Implement FastAPI application factory, CORS middleware, static file serving, and router mounting in `app/main.py`
+- [X] T004 [P] Create SQLAlchemy Base class, metadata mixins, and UUID/ID generators in `app/models/base.py`
+- [X] T005 [P] Create relational ORM models (`Transaction`, `Exception`, `Resolution`, `AuditEvent`) in `app/models/transaction.py`, `app/models/exception.py`, `app/models/resolution.py`, and `app/models/audit.py`
+- [X] T006 [P] Create Pydantic schemas for data validation and API I/O in `app/schemas/transaction.py`, `app/schemas/exception.py`, `app/schemas/resolution.py`, `app/schemas/ai.py`, and `app/schemas/audit.py`
+- [X] T007 [P] Create database repositories for data access and queries in `app/repositories/transaction_repository.py`, `app/repositories/exception_repository.py`, and `app/repositories/audit_repository.py`
+- [X] T008 Create 12 representative mock enterprise exceptions (covering High/Med/Low confidence and missing evidence edge cases) in `data/mock_exceptions.json` and seed loader in `app/seed/seed_data.py`
+- [X] T009 Implement FastAPI application factory, CORS middleware, static file serving, and router mounting in `app/main.py`
 
 **Checkpoint**: Foundation ready — database schema, seed data, and application bootstrap are fully operational.
 
@@ -45,14 +45,14 @@
 **Independent Test**: Seed database with mock exceptions, start server, query GET `/api/exceptions` and GET `/api/exceptions/{id}`, and verify dashboard renders queue items with accurate discrepancy values and evidence fields.
 
 ### Tests for User Story 1
-- [ ] T010 [P] [US1] Unit tests for deterministic exception detection engine in `tests/test_exception_engine.py`
+- [X] T010 [P] [US1] Unit tests for deterministic exception detection engine in `tests/test_exception_engine.py`
 
 ### Implementation for User Story 1
-- [ ] T011 [US1] Implement deterministic exception detection & variance calculation engine (`AMOUNT_MISMATCH`, `QUANTITY_MISMATCH`, `PAYMENT_OVERDUE`) in `app/services/exception_engine.py`
-- [ ] T012 [US1] Implement exception list and detail API endpoints with status/severity/type filtering in `app/api/routes_exceptions.py`
-- [ ] T013 [P] [US1] Build dashboard HTML layout, header metric counters, and split-screen queue containers in `frontend/templates/index.html`
-- [ ] T014 [P] [US1] Implement enterprise operations stylesheet, severity badges, and dark/light contrast cards in `frontend/static/css/styles.css`
-- [ ] T015 [US1] Implement reactive client logic for fetching exception queue, dynamic filtering, and detail drawer rendering in `frontend/static/js/app.js`
+- [X] T011 [US1] Implement deterministic exception detection & variance calculation engine (`AMOUNT_MISMATCH`, `QUANTITY_MISMATCH`, `PAYMENT_OVERDUE`) in `app/services/exception_engine.py`
+- [X] T012 [US1] Implement exception list and detail API endpoints with status/severity/type filtering in `app/api/routes_exceptions.py`
+- [X] T013 [P] [US1] Build dashboard HTML layout, header metric counters, and split-screen queue containers in `frontend/templates/index.html`
+- [X] T014 [P] [US1] Implement enterprise operations stylesheet, severity badges, and dark/light contrast cards in `frontend/static/css/styles.css`
+- [X] T015 [US1] Implement reactive client logic for fetching exception queue, dynamic filtering, and detail drawer rendering in `frontend/static/js/app.js`
 
 **Checkpoint**: User Story 1 complete — reviewer can triage exceptions and inspect evidence.
 
@@ -65,14 +65,14 @@
 **Independent Test**: Click "Explain" on an open exception (`INV-1023`), verify AI cites exact invoice vs. PO amounts and variance, and check that an `AI_EXPLANATION_GENERATED` audit event is emitted.
 
 ### Tests for User Story 2
-- [ ] T016 [P] [US2] Unit tests for dual-provider LLM client and failover behavior in `tests/test_ai_service.py`
+- [X] T016 [P] [US2] Unit tests for dual-provider LLM client and failover behavior in `tests/test_ai_service.py`
 
 ### Implementation for User Story 2
-- [ ] T017 [P] [US2] Define structured system prompts and hallucination-preventing JSON schemas in `app/llm/prompts.py`
-- [ ] T018 [US2] Implement resilient dual-provider LLM client (Groq `llama-3.3-70b-versatile` -> NVIDIA NIM `nvidia/nemotron-3.5-lightning-30b-a3b` -> deterministic offline fallback) in `app/llm/provider.py`
-- [ ] T019 [US2] Implement AI root-cause explanation service grounded in structured evidence in `app/services/ai_service.py`
-- [ ] T020 [US2] Implement POST `/api/exceptions/{id}/explain` API endpoint in `app/api/routes_resolution.py`
-- [ ] T021 [US2] Implement frontend AI Explanation panel with evidence citation tags and loading skeletons in `frontend/static/js/app.js`
+- [X] T017 [P] [US2] Define structured system prompts and hallucination-preventing JSON schemas in `app/llm/prompts.py`
+- [X] T018 [US2] Implement resilient dual-provider LLM client (Groq `llama-3.3-70b-versatile` -> NVIDIA NIM `nvidia/nemotron-3.5-lightning-30b-a3b` -> deterministic offline fallback) in `app/llm/provider.py`
+- [X] T019 [US2] Implement AI root-cause explanation service grounded in structured evidence in `app/services/ai_service.py`
+- [X] T020 [US2] Implement POST `/api/exceptions/{id}/explain` API endpoint in `app/api/routes_resolution.py`
+- [X] T021 [US2] Implement frontend AI Explanation panel with evidence citation tags and loading skeletons in `frontend/static/js/app.js`
 
 **Checkpoint**: User Story 2 complete — reviewer receives grounded AI root-cause explanations.
 
@@ -85,13 +85,13 @@
 **Independent Test**: Request resolution suggestion on exceptions, verify action belongs to allowed enum, confidence score is between 0.0 and 1.0, and score breakdown matches formula.
 
 ### Tests for User Story 3
-- [ ] T022 [P] [US3] Unit tests for composite confidence calculations and scoring weights in `tests/test_confidence.py`
+- [X] T022 [P] [US3] Unit tests for composite confidence calculations and scoring weights in `tests/test_confidence.py`
 
 ### Implementation for User Story 3
-- [ ] T023 [US3] Implement composite confidence calculation engine (30% evidence, 30% rule, 20% classification, 20% AI) in `app/services/confidence_engine.py`
-- [ ] T024 [US3] Implement AI resolution recommendation generator with constrained action enums in `app/services/ai_service.py`
-- [ ] T025 [US3] Implement POST `/api/exceptions/{id}/suggest` API endpoint in `app/api/routes_resolution.py`
-- [ ] T026 [US3] Implement recommendation card, confidence gauge meter, and breakdown badges in `frontend/static/js/app.js`
+- [X] T023 [US3] Implement composite confidence calculation engine (30% evidence, 30% rule, 20% classification, 20% AI) in `app/services/confidence_engine.py`
+- [X] T024 [US3] Implement AI resolution recommendation generator with constrained action enums in `app/services/ai_service.py`
+- [X] T025 [US3] Implement POST `/api/exceptions/{id}/suggest` API endpoint in `app/api/routes_resolution.py`
+- [X] T026 [US3] Implement recommendation card, confidence gauge meter, and breakdown badges in `frontend/static/js/app.js`
 
 **Checkpoint**: User Story 3 complete — AI recommendations with confidence metrics displayed.
 
@@ -104,13 +104,13 @@
 **Independent Test**: Run auto-resolve on `INV-1023` (94% -> auto-resolved), `PAY-2041` (78% -> blocked/pending human), and `PO-8872` (missing evidence -> blocked/escalated).
 
 ### Tests for User Story 4
-- [ ] T027 [P] [US4] Unit tests for safety gates and auto-resolution policy rules in `tests/test_resolution.py`
+- [X] T027 [P] [US4] Unit tests for safety gates and auto-resolution policy rules in `tests/test_resolution.py`
 
 ### Implementation for User Story 4
-- [ ] T028 [US4] Implement deterministic safety gates (evidence completeness, valid exception type, non-null mandatory fields) in `app/services/confidence_engine.py`
-- [ ] T029 [US4] Implement resolution state machine, status transitions, and duplicate resolution guard in `app/services/resolution_service.py`
-- [ ] T030 [US4] Implement POST `/api/exceptions/{id}/resolve` endpoint in `app/api/routes_resolution.py`
-- [ ] T031 [US4] Implement frontend Auto-Resolve action button, policy status banner, and live queue status updates in `frontend/static/js/app.js`
+- [X] T028 [US4] Implement deterministic safety gates (evidence completeness, valid exception type, non-null mandatory fields) in `app/services/confidence_engine.py`
+- [X] T029 [US4] Implement resolution state machine, status transitions, and duplicate resolution guard in `app/services/resolution_service.py`
+- [X] T030 [US4] Implement POST `/api/exceptions/{id}/resolve` endpoint in `app/api/routes_resolution.py`
+- [X] T031 [US4] Implement frontend Auto-Resolve action button, policy status banner, and live queue status updates in `frontend/static/js/app.js`
 
 **Checkpoint**: User Story 4 complete — autonomous resolution and safety gates enforced.
 
@@ -123,12 +123,12 @@
 **Independent Test**: Submit human review with approval on `PAY-2041`, verify status becomes `RESOLVED`, and check `HUMAN_APPROVED` logged with reviewer reason.
 
 ### Tests for User Story 5
-- [ ] T032 [P] [US5] Integration tests for human review decisions (`APPROVE`, `REJECT`, `ESCALATE`) in `tests/test_resolution.py`
+- [X] T032 [P] [US5] Integration tests for human review decisions (`APPROVE`, `REJECT`, `ESCALATE`) in `tests/test_resolution.py`
 
 ### Implementation for User Story 5
-- [ ] T033 [US5] Implement reviewer decision handlers and state transition logic in `app/services/resolution_service.py`
-- [ ] T034 [US5] Implement POST `/api/exceptions/{id}/review` endpoint in `app/api/routes_resolution.py`
-- [ ] T035 [US5] Implement human review modal with decision buttons (Approve / Reject / Escalate) and rationale input in `frontend/templates/index.html` and `frontend/static/js/app.js`
+- [X] T033 [US5] Implement reviewer decision handlers and state transition logic in `app/services/resolution_service.py`
+- [X] T034 [US5] Implement POST `/api/exceptions/{id}/review` endpoint in `app/api/routes_resolution.py`
+- [X] T035 [US5] Implement human review modal with decision buttons (Approve / Reject / Escalate) and rationale input in `frontend/templates/index.html` and `frontend/static/js/app.js`
 
 **Checkpoint**: User Story 5 complete — human-in-command operational review loop fully active.
 
@@ -141,12 +141,12 @@
 **Independent Test**: Query GET `/api/exceptions/{id}/audit` across an exception lifecycle and verify all events contain timestamps, actor attribution, and metadata.
 
 ### Tests for User Story 6
-- [ ] T036 [P] [US6] Integration tests for audit event persistence and retrieval in `tests/test_api.py`
+- [X] T036 [P] [US6] Integration tests for audit event persistence and retrieval in `tests/test_api.py`
 
 ### Implementation for User Story 6
-- [ ] T037 [US6] Implement audit logging service for recording lifecycle events in `app/services/audit_service.py`
-- [ ] T038 [US6] Implement GET `/api/exceptions/{id}/audit` endpoint in `app/api/routes_audit.py`
-- [ ] T039 [US6] Implement frontend chronological audit trail timeline component with actor badges in `frontend/static/js/app.js`
+- [X] T037 [US6] Implement audit logging service for recording lifecycle events in `app/services/audit_service.py`
+- [X] T038 [US6] Implement GET `/api/exceptions/{id}/audit` endpoint in `app/api/routes_audit.py`
+- [X] T039 [US6] Implement frontend chronological audit trail timeline component with actor badges in `frontend/static/js/app.js`
 
 **Checkpoint**: User Story 6 complete — comprehensive audit trail visible and verifiable.
 
@@ -156,9 +156,9 @@
 
 **Purpose**: Architecture documentation, quickstart validation, and system hardening.
 
-- [ ] T040 [P] Create architecture documentation and component diagrams in `architecture/system.md`, `architecture/data-model.md`, `architecture/api.md`, and `architecture/README.md`
-- [ ] T041 [P] Create project overview, setup guide, and golden demo scenarios in `README.md`
-- [ ] T042 Execute full automated test suite (`pytest -v`) and validate golden demo scenarios against `specs/001-exception-resolution-workbench/quickstart.md`
+- [X] T040 [P] Create architecture documentation and component diagrams in `architecture/system.md`, `architecture/data-model.md`, `architecture/api.md`, and `architecture/README.md`
+- [X] T041 [P] Create project overview, setup guide, and golden demo scenarios in `README.md`
+- [X] T042 Execute full automated test suite (`pytest -v`) and validate golden demo scenarios against `specs/001-exception-resolution-workbench/quickstart.md`
 
 ---
 
