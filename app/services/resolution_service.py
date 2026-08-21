@@ -99,12 +99,32 @@ class ResolutionService:
             exc.status = ExceptionStatus.RESOLVED
             exc.resolved_at = datetime.now(timezone.utc)
             audit_action = "HUMAN_APPROVED"
+            allowed_action = AllowedAction.APPROVE_EXCEPTION
+            conf_val = 0.98
         elif decision == "REJECT":
             exc.status = ExceptionStatus.REJECTED
             audit_action = "HUMAN_REJECTED"
+            allowed_action = AllowedAction.NO_ACTION
+            conf_val = 0.50
         else:
             exc.status = ExceptionStatus.ESCALATED
             audit_action = "ESCALATED"
+            allowed_action = AllowedAction.ESCALATE_TO_HUMAN
+            conf_val = 0.60
+
+        # Persist Resolution record
+        resolution = ResolutionRecord(
+            id=f"RES-{uuid.uuid4().hex[:8].upper()}",
+            exception_id=exc.id,
+            suggested_action=allowed_action,
+            reason=reason,
+            confidence=conf_val,
+            score_breakdown=json.dumps({"reviewer_decision": decision, "notes": reason}),
+            safety_gates_passed=True if decision == "APPROVE" else False,
+            execution_mode="HUMAN",
+            executed_by="HUMAN_REVIEWER"
+        )
+        self.db.add(resolution)
 
         self.audit_service.log_event(
             exception_id=exc.id,

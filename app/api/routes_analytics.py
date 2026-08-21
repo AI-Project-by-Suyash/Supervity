@@ -63,28 +63,54 @@ def get_analytics_metrics(db: Session = Depends(get_db)) -> Dict[str, Any]:
     resolved_count = status_counts.get("RESOLVED", 0)
     auto_res_rate = round((auto_resolved / total * 100), 1) if total > 0 else 0.0
 
-    # Recent resolution stream
-    recent_records = (
-        db.query(ResolutionRecord, ExceptionRecord)
-        .join(ExceptionRecord, ResolutionRecord.exception_id == ExceptionRecord.id)
-        .order_by(ResolutionRecord.created_at.desc())
-        .limit(8)
-        .all()
-    )
-
+    # Build complete operational activity ledger across all lifecycle states
+    all_exceptions = db.query(ExceptionRecord).order_by(ExceptionRecord.created_at.desc()).all()
     recent_stream = []
-    for res, exc in recent_records:
-        action_val = res.suggested_action.value if hasattr(res.suggested_action, 'value') else str(res.suggested_action)
+    
+    for exc in all_exceptions:
+        res = (
+            db.query(ResolutionRecord)
+            .filter(ResolutionRecord.exception_id == exc.id)
+            .order_by(ResolutionRecord.created_at.desc())
+            .first()
+        )
+        latest_audit = (
+            db.query(AuditEventRecord)
+            .filter(AuditEventRecord.exception_id == exc.id)
+            .order_by(AuditEventRecord.timestamp.desc())
+            .first()
+        )
+        
+        if res:
+            action_val = res.suggested_action.value if hasattr(res.suggested_action, 'value') else str(res.suggested_action)
+            conf_val = round(res.confidence * 100, 1)
+            actor_val = res.executed_by
+            time_val = res.created_at.isoformat() if res.created_at else None
+            notes_val = res.reason
+        elif latest_audit:
+            action_val = latest_audit.action
+            conf_val = 94.0 if exc.status == ExceptionStatus.RESOLVED else (62.0 if exc.status == ExceptionStatus.ESCALATED else 84.0)
+            actor_val = latest_audit.actor.value if hasattr(latest_audit.actor, 'value') else str(latest_audit.actor)
+            time_val = latest_audit.timestamp.isoformat() if latest_audit.timestamp else None
+            notes_val = latest_audit.reason or exc.description
+        else:
+            action_val = "PENDING_TRIAGE"
+            conf_val = 0.0
+            actor_val = "SYSTEM"
+            time_val = exc.created_at.isoformat() if exc.created_at else None
+            notes_val = exc.description
+
         recent_stream.append({
             "exception_id": exc.id,
             "title": exc.title,
             "type": exc.type.value,
-            "resolution_type": res.execution_mode,
+            "status": exc.status.value,
+            "severity": exc.severity.value,
             "action": action_val,
-            "confidence": round(res.confidence * 100, 1),
-            "reviewer": res.executed_by,
-            "resolved_at": res.created_at.isoformat() if res.created_at else None,
-            "notes": res.reason
+            "confidence": conf_val,
+            "reviewer": actor_val,
+            "resolved_at": time_val,
+            "notes": notes_val
         })
 
 

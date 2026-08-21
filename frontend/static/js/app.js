@@ -607,30 +607,54 @@ function renderResolutionsLedger(stream) {
   if (!tbody) return;
 
   if (!stream || stream.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="py-6 text-center text-slate-500 text-xs">No resolution records recorded yet. Resolve exceptions in Workbench to populate ledger.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" class="py-6 text-center text-slate-500 text-xs">No exceptions recorded.</td></tr>';
     return;
   }
 
   tbody.innerHTML = stream.map(item => {
-    const isAuto = item.resolution_type === 'AUTO_RESOLVE';
-    const actorBadge = isAuto 
-      ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800">AI Employee</span>'
-      : '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-950 text-indigo-400 border border-indigo-800">Reviewer Lead</span>';
+    // Status Badge
+    let statusClass = 'bg-slate-800 text-slate-300 border-slate-700';
+    if (item.status === 'RESOLVED') statusClass = 'bg-emerald-950 text-emerald-400 border-emerald-800';
+    else if (item.status === 'PENDING_HUMAN') statusClass = 'bg-amber-950 text-amber-400 border-amber-800';
+    else if (item.status === 'ESCALATED') statusClass = 'bg-red-950 text-red-400 border-red-800';
+    else if (item.status === 'REJECTED') statusClass = 'bg-rose-950 text-rose-400 border-rose-800';
+    else if (item.status === 'RECOMMENDED') statusClass = 'bg-cyan-950 text-cyan-400 border-cyan-800';
+
+    const statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${statusClass}">${item.status}</span>`;
+
+    // Severity Badge
+    let sevClass = 'text-blue-400';
+    if (item.severity === 'HIGH') sevClass = 'text-red-400 font-bold';
+    else if (item.severity === 'MEDIUM') sevClass = 'text-amber-400 font-medium';
+    const sevBadge = `<span class="text-[11px] font-mono ${sevClass}">${item.severity || 'MED'}</span>`;
+
+    // Actor Badge
+    let actorBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 text-slate-400 border border-slate-800">System Policy</span>';
+    if (item.reviewer === 'AI_EMPLOYEE' || item.reviewer === 'SYSTEM' && item.status === 'RESOLVED') {
+      actorBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800"><i class="fa-solid fa-robot mr-1"></i>AI Employee</span>';
+    } else if (item.reviewer === 'HUMAN_REVIEWER' || item.reviewer === 'Reviewer Lead') {
+      actorBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-950 text-indigo-400 border border-indigo-800"><i class="fa-solid fa-user-shield mr-1"></i>Reviewer Lead</span>';
+    }
     
-    const actionBadge = `<span class="font-mono text-[11px] text-slate-200">${item.action}</span>`;
+    const actionBadge = `<span class="font-mono text-[11px] text-slate-200">${item.action || 'PENDING_TRIAGE'}</span>`;
     const timeStr = item.resolved_at ? new Date(item.resolved_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--';
+    const notesStr = item.notes ? (item.notes.length > 55 ? item.notes.substring(0, 52) + '...' : item.notes) : '--';
 
     return `
       <tr class="hover:bg-slate-900/60 transition">
         <td class="py-3 px-3 font-mono font-bold text-emerald-400">${item.exception_id}</td>
-        <td class="py-3 px-3 font-medium text-slate-200">${item.title}</td>
+        <td class="py-3 px-3 font-medium text-slate-200 max-w-[180px] truncate" title="${item.title}">${item.title}</td>
         <td class="py-3 px-3 text-[11px] text-slate-400 font-mono">${item.type}</td>
+        <td class="py-3 px-3">${statusBadge}</td>
+        <td class="py-3 px-3">${sevBadge}</td>
         <td class="py-3 px-3">${actionBadge}</td>
-        <td class="py-3 px-3 font-mono font-bold ${item.confidence >= 90 ? 'text-emerald-400' : 'text-amber-400'}">${item.confidence}%</td>
+        <td class="py-3 px-3 font-mono font-bold ${item.confidence >= 90 ? 'text-emerald-400' : (item.confidence >= 70 ? 'text-amber-400' : 'text-slate-400')}">${item.confidence ? item.confidence + '%' : '--'}</td>
         <td class="py-3 px-3">${actorBadge}</td>
-        <td class="py-3 px-3 text-slate-400 font-mono text-[11px]">${timeStr}</td>
+        <td class="py-3 px-3 text-slate-400 text-[11px] max-w-[200px] truncate" title="${item.notes || ''}">${notesStr}</td>
+        <td class="py-3 px-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">${timeStr}</td>
       </tr>
     `;
   }).join('');
 }
+
 
