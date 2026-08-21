@@ -14,10 +14,16 @@ class DualLLMProvider:
     """
     def __init__(self):
         self.groq_api_key = settings.GROQ_API_KEY
-        self.groq_models = [settings.GROQ_MODEL, "openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.6-27b"]
+        deprecated_map = {
+            "llama-3.3-70b-versatile": "openai/gpt-oss-120b",
+            "nvidia/nemotron-3.5-lightning-30b-a3b": "meta/llama-3.1-8b-instruct"
+        }
+        primary_groq = deprecated_map.get(settings.GROQ_MODEL, settings.GROQ_MODEL)
+        self.groq_models = list(dict.fromkeys([primary_groq, "openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.6-27b"]))
         
         self.nvidia_api_key = settings.NVIDIA_API_KEY
-        self.nvidia_models = [settings.NVIDIA_MODEL, "meta/llama-3.1-8b-instruct", "meta/llama-3.1-70b-instruct"]
+        primary_nvidia = deprecated_map.get(settings.NVIDIA_MODEL, settings.NVIDIA_MODEL)
+        self.nvidia_models = list(dict.fromkeys([primary_nvidia, "meta/llama-3.1-8b-instruct", "meta/llama-3.1-70b-instruct"]))
         self.nvidia_base_url = settings.NVIDIA_BASE_URL.rstrip('/')
 
     async def generate_json(self, system_prompt: str, user_prompt: str) -> Dict[str, Any]:
