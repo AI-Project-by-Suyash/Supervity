@@ -52,8 +52,8 @@ app.include_router(routes_exceptions.router, prefix='/api', tags=['Exceptions'])
 app.include_router(routes_resolution.router, prefix='/api', tags=['Resolution & AI'])
 app.include_router(routes_audit.router, prefix='/api', tags=['Audit'])
 
-@app.get('/health', tags=['Health'])
-@app.get('/api/health', tags=['Health'])
+@app.api_route('/health', methods=['GET', 'HEAD'], tags=['Health'])
+@app.api_route('/api/health', methods=['GET', 'HEAD'], tags=['Health'])
 async def health_check():
     return {
         'status': 'healthy',
@@ -61,9 +61,10 @@ async def health_check():
         'version': '1.0.0'
     }
 
-@app.get('/', response_class=HTMLResponse)
+@app.api_route('/', methods=['GET', 'HEAD'], response_class=HTMLResponse)
 async def serve_dashboard(request: Request):
-    return templates.TemplateResponse('index.html', {'request': request})
+    return templates.TemplateResponse(request=request, name='index.html')
+
 
 @app.post('/api/seed/reset', tags=['Seed'])
 async def reset_seed_data():

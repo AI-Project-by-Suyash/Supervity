@@ -16,6 +16,13 @@ def test_health_check_endpoint():
     assert data["status"] == "healthy"
     assert "version" in data
 
+def test_root_dashboard_endpoint():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "Exception Resolution Workbench" in response.text
+    head_resp = client.head("/")
+    assert head_resp.status_code == 200
+
 def test_list_exceptions_api():
     response = client.get("/api/exceptions")
     assert response.status_code == 200
