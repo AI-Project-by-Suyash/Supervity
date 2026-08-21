@@ -1,0 +1,42 @@
+# Agentic AI Tooling & Internal Scratchpads (Strict Constitution Compliance)
+.agents/
+.gemini/
+.claude/
+.cursor/
+.cline/
+.roo/
+.system_generated/
+*.log
+
+# Spec Kit Local State
+.specify/feature.json
+.specify/extensions/*/local-config.yml
+
+# Python Caches & Virtual Environments
+__pycache__/
+*.py[cod]
+*.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.secret
+
+# SQLite Databases & Local Storage
+*.db
+*.sqlite
+*.sqlite3
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
