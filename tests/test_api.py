@@ -68,3 +68,15 @@ def test_audit_trail_endpoint():
     events = response.json()
     assert len(events) >= 2  # INIT + EXPLAIN
     assert any(e["actor"] == "AI_EMPLOYEE" for e in events)
+
+def test_analytics_metrics_api():
+    response = client.get("/api/analytics/metrics")
+    assert response.status_code == 200
+    data = response.json()
+    assert "summary" in data
+    assert "status_distribution" in data
+    assert "severity_distribution" in data
+    assert "type_distribution" in data
+    assert data["summary"]["total_exceptions"] == 12
+    assert "total_financial_exposure" in data["summary"]
+

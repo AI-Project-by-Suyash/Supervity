@@ -47,10 +47,13 @@ if os.path.exists(static_dir):
 
 templates = Jinja2Templates(directory=templates_dir if os.path.exists(templates_dir) else '.')
 
+from app.api import routes_exceptions, routes_resolution, routes_audit, routes_analytics
+
 # Include API Routers
 app.include_router(routes_exceptions.router, prefix='/api', tags=['Exceptions'])
 app.include_router(routes_resolution.router, prefix='/api', tags=['Resolution & AI'])
 app.include_router(routes_audit.router, prefix='/api', tags=['Audit'])
+app.include_router(routes_analytics.router, prefix='/api', tags=['Analytics'])
 
 @app.api_route('/health', methods=['GET', 'HEAD'], tags=['Health'])
 @app.api_route('/api/health', methods=['GET', 'HEAD'], tags=['Health'])
